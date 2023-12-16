@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons/configure.svg</file>
+    <file>icons/document-print.svg</file>
+    <file>icons/edit-clear-history.svg</file>
+    <file>icons/list-add.svg</file>
+    <file>icons/list-remove.svg</file>
+  </qresource>
+</RCC>
