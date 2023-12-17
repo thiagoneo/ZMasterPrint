@@ -90,7 +90,7 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label_4.setText(_translate("Dialog", "<html><head/><body><p>Editor de etiquetas.</p><p>Desenvolvido por <span style=\" font-weight:600;\">Thiago Ferreira</span></p><p><a href=\"https://github.com/thiagoneo/ZMasterPrint\"><span style=\" text-decoration: underline; color:#0850bd;\">https://github.com/thiagoneo/ZMasterPrint</span></a></p><p><a href=\"https://www.gnu.org/licenses/gpl-3.0.html\"><span style=\" text-decoration: underline; color:#0850bd;\">Licença: Licença Pública Geral GNU versão 3</span></a></p></body></html>"))
+        self.label_4.setText(_translate("Dialog", "<html><head/><body><p>Editor de etiquetas.</p><p>Desenvolvido por <span style=\" font-weight:600;\">Thiago Ferreira</span></p><p><a href=\"https://github.com/thiagoneo/ZMasterPrint\"><span style=\" text-decoration: underline; color:#0850bd;\">https://github.com/thiagoneo/ZMasterPrint</span></a></p><p>Licença: <a href=\"https://opensource.org/license/mit/\"><span style=\" text-decoration: underline; color:#0850bd;\">The MIT License</span></a></p></body></html>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Dialog", "Sobre"))
         self.label_5.setText(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"

@@ -39,7 +39,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Editor de etiquetas.&lt;/p&gt;&lt;p&gt;Desenvolvido por &lt;span style=&quot; font-weight:600;&quot;&gt;Thiago Ferreira&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/thiagoneo/ZMasterPrint&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0850bd;&quot;&gt;https://github.com/thiagoneo/ZMasterPrint&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.gnu.org/licenses/gpl-3.0.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0850bd;&quot;&gt;Licença: Licença Pública Geral GNU versão 3&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Editor de etiquetas.&lt;/p&gt;&lt;p&gt;Desenvolvido por &lt;span style=&quot; font-weight:600;&quot;&gt;Thiago Ferreira&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/thiagoneo/ZMasterPrint&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0850bd;&quot;&gt;https://github.com/thiagoneo/ZMasterPrint&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Licença: &lt;a href=&quot;https://opensource.org/license/mit/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0850bd;&quot;&gt;The MIT License&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </widget>
