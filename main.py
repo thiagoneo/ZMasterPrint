@@ -655,6 +655,7 @@ class Window(qt.QMainWindow):
     
     def imprimir_arquivo_zpl(self):
 
+	qtd = self.ui.spinQtdArq.value()
         self.config = confighelper.read_config_file()
         self.host = self.config['Device']['host']
         self.printer = self.config['Device']['printer']
@@ -664,7 +665,7 @@ class Window(qt.QMainWindow):
         self.ajuste_horizontal = self.config['Label']['left_margin']
         arquivo = self.ui.lblArq.text()
         if platform.system() == 'Linux':
-            command = '''lp -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + " " + arquivo
+            command = '''lp -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + " -n " + qtd + " " + arquivo
         elif platform.system() == 'Windows':
             command = '''net use lpt2 /delete & net use lpt2 \\\\''' + self.host + '''\\''' + self.printer + ''' & copy ''' + arquivo + ''' lpt2'''
         else:
@@ -673,7 +674,6 @@ class Window(qt.QMainWindow):
         print(command)
         os.system(command)
         # self.temp_dir.cleanup()
-        qtd = self.ui.spinQtdArq.value()
         if qtd <= 1:
             print(str(qtd) + " etiqueta enviada para impressão!")
         else:
