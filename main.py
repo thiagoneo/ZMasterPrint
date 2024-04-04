@@ -49,6 +49,8 @@ class Window(qt.QMainWindow):
         self.ui.btnPrintVal.clicked.connect(lambda: self.print_zpl_label(self.ui.tabWidget.currentIndex()))
         self.ui.btnPrintPadaria_7.clicked.connect(lambda: self.print_zpl_label(self.ui.tabWidget.currentIndex()))
         self.ui.actionQuit.triggered.connect(lambda: app.quit())
+        self.ui.btnSelecArq.clicked.connect(lambda: self.selecionar_arquivo_zpl);
+        self.ui.btnPrintArq.clicked.connect(lambda: self.imprimir_arquivo_zpl)
         # Atalhos de teclado
         self.atalhoImprimir = qt.QShortcut(gui.QKeySequence('Ctrl+Return'),self)
         self.atalhoImprimir1 = qt.QShortcut(gui.QKeySequence('Ctrl+Enter'),self)
@@ -626,6 +628,28 @@ class Window(qt.QMainWindow):
             str_produto = (str(produto["codigo"]) + ": " + str(produto["descricao"]))
             self.ui.comboBoxProdutos.addItem(str_produto)
             # codigo = str_produto.split(':')[0]
+    
+    def selecionar_arquivo_zpl(self):
+        self.arquivo_zpl = qt.QFileDialog.getOpenFileName(self, "Abrir", "", "Arquivos ZPL (*.zpl)")
+        if self.arquivo_zpl:
+            self.ui.lblArq.setText(self.arquivo_zpl[0])
+    
+    def imprimir_arquivo_zpl(self):
+        arquivo = self.ui.lblArq.text()
+        if platform.system() == 'Linux':
+            command = '''lp -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + ''' "arquivo"'''
+        elif platform.system() == 'Windows':
+            command = '''net use lpt2 /delete & net use lpt2 \\\\''' + self.host + '''\\''' + self.printer + ''' & copy ''' + arquivo + ''' lpt2'''
+        else:
+            command = ""
+            print("S.O. não suportado!")
+        os.system(command)
+        # self.temp_dir.cleanup()
+        qtd = self.ui.spinQtdArq
+        if qtd <= 1:
+            print(str(qtd) + " etiqueta enviada para impressão!")
+        else:
+            print(str(qtd) + " etiquetas enviadas para impressão!")
     
 
 
