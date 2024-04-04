@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>402</width>
-    <height>407</height>
+    <width>475</width>
+    <height>515</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <rect>
      <x>20</x>
      <y>20</y>
-     <width>361</width>
+     <width>431</width>
      <height>121</height>
     </rect>
    </property>
@@ -30,7 +30,7 @@
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>341</width>
+      <width>411</width>
       <height>34</height>
      </rect>
     </property>
@@ -87,7 +87,7 @@
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>341</width>
+      <width>411</width>
       <height>34</height>
      </rect>
     </property>
@@ -144,8 +144,8 @@
      <rect>
       <x>9</x>
       <y>10</y>
-      <width>341</width>
-      <height>35</height>
+      <width>411</width>
+      <height>36</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -190,7 +190,7 @@
     <rect>
      <x>20</x>
      <y>150</y>
-     <width>361</width>
+     <width>431</width>
      <height>201</height>
     </rect>
    </property>
@@ -202,7 +202,7 @@
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>331</width>
+      <width>411</width>
       <height>36</height>
      </rect>
     </property>
@@ -261,7 +261,7 @@
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>331</width>
+      <width>411</width>
       <height>34</height>
      </rect>
     </property>
@@ -316,7 +316,7 @@
      <rect>
       <x>10</x>
       <y>120</y>
-      <width>331</width>
+      <width>411</width>
       <height>34</height>
      </rect>
     </property>
@@ -377,7 +377,7 @@
      <rect>
       <x>10</x>
       <y>160</y>
-      <width>331</width>
+      <width>411</width>
       <height>34</height>
      </rect>
     </property>
@@ -429,8 +429,8 @@
      <rect>
       <x>9</x>
       <y>10</y>
-      <width>341</width>
-      <height>35</height>
+      <width>411</width>
+      <height>36</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -470,12 +470,92 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_8">
+  <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>360</y>
-     <width>361</width>
+     <width>431</width>
+     <height>101</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string/>
+   </property>
+   <widget class="QWidget" name="verticalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>411</width>
+      <height>36</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_13">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Pasta padrão para arquivos ZPL</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_5">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>411</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_8">
+     <item>
+      <widget class="QLabel" name="labelPastaZPL">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_7">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>18</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnSelecPastaZPL">
+       <property name="text">
+        <string>Selecionar pasta</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget_8">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>470</y>
+     <width>411</width>
      <height>36</height>
     </rect>
    </property>

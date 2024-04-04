@@ -49,6 +49,8 @@ class Window(qt.QMainWindow):
         self.ui.btnPrintVal.clicked.connect(lambda: self.print_zpl_label(self.ui.tabWidget.currentIndex()))
         self.ui.btnPrintPadaria_7.clicked.connect(lambda: self.print_zpl_label(self.ui.tabWidget.currentIndex()))
         self.ui.actionQuit.triggered.connect(lambda: app.quit())
+        self.ui.btnSelecArq.clicked.connect(self.selecionar_arquivo_zpl);
+        self.ui.btnPrintArq.clicked.connect(self.imprimir_arquivo_zpl)
         # Atalhos de teclado
         self.atalhoImprimir = qt.QShortcut(gui.QKeySequence('Ctrl+Return'),self)
         self.atalhoImprimir1 = qt.QShortcut(gui.QKeySequence('Ctrl+Enter'),self)
@@ -329,7 +331,7 @@ class Window(qt.QMainWindow):
         dialog = qt.QDialog()
         dialog.ui = SettingsDialog()
         dialog.ui.setupUi(dialog)
-        dialog.setFixedSize(402,407)
+        dialog.setFixedSize(470,520)
         dialog.setWindowTitle("Configurações")
         if os.path.isfile(confighelper.local_file):
             config = confighelper.read_config_file()
@@ -339,17 +341,24 @@ class Window(qt.QMainWindow):
             leftMargin = config['Label']['left_margin']
             host = config['Device']['host']
             printer = config['Device']['printer']
+            zpl_dir = config['ZPLDir']['directory']
             dialog.ui.spinLabelWidth.setValue(int(labelWidth))
             dialog.ui.spinLabelHeight.setValue(int(labelHeight))
             dialog.ui.spinVerticalAdj.setValue(int(topMargin))
             dialog.ui.spinHorizontalAdj.setValue(int(leftMargin))
             dialog.ui.lineHost.setText(host)
             dialog.ui.linePrinter.setText(printer)
+            dialog.ui.labelPastaZPL.setText(zpl_dir)
         else:
             dialog.ui.spinLabelWidth.setValue(60)
             dialog.ui.spinLabelHeight.setValue(30)
             dialog.ui.spinVerticalAdj.setValue(0)
             dialog.ui.spinHorizontalAdj.setValue(0)
+
+        dialog.ui.btnSelecPastaZPL.clicked.connect(
+            lambda: dialog.ui.labelPastaZPL.setText(qt.QFileDialog.getExistingDirectory(self, "Selecionar uma pasta"))
+            )
+
         dialog.ui.btnSave.accepted.connect(
             lambda: confighelper.write_config_file(
                 str(dialog.ui.lineHost.text()),
@@ -357,9 +366,13 @@ class Window(qt.QMainWindow):
                 str(dialog.ui.spinLabelHeight.value()),
                 str(dialog.ui.spinLabelWidth.value()),
                 str(dialog.ui.spinVerticalAdj.value()),
-                str(dialog.ui.spinHorizontalAdj.value())
+                str(dialog.ui.spinHorizontalAdj.value()),
+                str(dialog.ui.labelPastaZPL.text())
             )
         )
+
+        dialog.ui.btnSave.accepted.connect(dialog.close)
+
         dialog.ui.btnSave.accepted.connect(dialog.close)
         dialog.ui.btnSave.accepted.connect(self.show_config_saved_dialog)
         dialog.ui.btnSave.rejected.connect(dialog.close)
@@ -626,6 +639,45 @@ class Window(qt.QMainWindow):
             str_produto = (str(produto["codigo"]) + ": " + str(produto["descricao"]))
             self.ui.comboBoxProdutos.addItem(str_produto)
             # codigo = str_produto.split(':')[0]
+    
+    def selecionar_arquivo_zpl(self):
+        self.config = confighelper.read_config_file()
+        self.host = self.config['Device']['host']
+        self.printer = self.config['Device']['printer']
+        self.labelWidth = int(self.config['Label']['width'])
+        self.labelHeight = int(self.config['Label']['height'])
+        self.ajuste_vertical = self.config['Label']['top_margin']
+        self.ajuste_horizontal = self.config['Label']['left_margin']
+        self.default_zpl_folder = self.config['ZPLDir']['directory']
+        self.arquivo_zpl = qt.QFileDialog.getOpenFileName(self, "Abrir", self.default_zpl_folder, "Arquivos ZPL (*.zpl)")
+        if self.arquivo_zpl:
+            self.ui.lblArq.setText(self.arquivo_zpl[0])
+    
+    def imprimir_arquivo_zpl(self):
+
+        self.config = confighelper.read_config_file()
+        self.host = self.config['Device']['host']
+        self.printer = self.config['Device']['printer']
+        self.labelWidth = int(self.config['Label']['width'])
+        self.labelHeight = int(self.config['Label']['height'])
+        self.ajuste_vertical = self.config['Label']['top_margin']
+        self.ajuste_horizontal = self.config['Label']['left_margin']
+        arquivo = self.ui.lblArq.text()
+        if platform.system() == 'Linux':
+            command = '''lp -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + " " + arquivo
+        elif platform.system() == 'Windows':
+            command = '''net use lpt2 /delete & net use lpt2 \\\\''' + self.host + '''\\''' + self.printer + ''' & copy ''' + arquivo + ''' lpt2'''
+        else:
+            command = ""
+            print("S.O. não suportado!")
+        print(command)
+        os.system(command)
+        # self.temp_dir.cleanup()
+        qtd = self.ui.spinQtdArq.value()
+        if qtd <= 1:
+            print(str(qtd) + " etiqueta enviada para impressão!")
+        else:
+            print(str(qtd) + " etiquetas enviadas para impressão!")
     
 
 
