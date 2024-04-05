@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>475</width>
-    <height>515</height>
+    <height>518</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
       <x>10</x>
       <y>40</y>
       <width>411</width>
-      <height>34</height>
+      <height>35</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -88,7 +88,7 @@
       <x>10</x>
       <y>80</y>
       <width>411</width>
-      <height>34</height>
+      <height>35</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -203,7 +203,7 @@
       <x>10</x>
       <y>40</y>
       <width>411</width>
-      <height>36</height>
+      <height>37</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -262,7 +262,7 @@
       <x>10</x>
       <y>80</y>
       <width>411</width>
-      <height>34</height>
+      <height>35</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -317,7 +317,7 @@
       <x>10</x>
       <y>120</y>
       <width>411</width>
-      <height>34</height>
+      <height>35</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -378,7 +378,7 @@
       <x>10</x>
       <y>160</y>
       <width>411</width>
-      <height>34</height>
+      <height>35</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -410,8 +410,17 @@
          <height>0</height>
         </size>
        </property>
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="minimum">
         <number>-99</number>
+       </property>
+       <property name="maximum">
+        <number>99</number>
        </property>
       </widget>
      </item>
@@ -511,34 +520,14 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>60</y>
+      <y>50</y>
       <width>411</width>
-      <height>34</height>
+      <height>37</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_8">
      <item>
-      <widget class="QLabel" name="labelPastaZPL">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_7">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>18</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
+      <widget class="QLineEdit" name="lePastaZPL"/>
      </item>
      <item>
       <widget class="QPushButton" name="btnSelecPastaZPL">
@@ -553,10 +542,10 @@
   <widget class="QWidget" name="horizontalLayoutWidget_8">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>20</x>
      <y>470</y>
-     <width>411</width>
-     <height>36</height>
+     <width>431</width>
+     <height>37</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_9">

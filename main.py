@@ -348,7 +348,7 @@ class Window(qt.QMainWindow):
             dialog.ui.spinHorizontalAdj.setValue(int(leftMargin))
             dialog.ui.lineHost.setText(host)
             dialog.ui.linePrinter.setText(printer)
-            dialog.ui.labelPastaZPL.setText(zpl_dir)
+            dialog.ui.lePastaZPL.setText(zpl_dir)
         else:
             dialog.ui.spinLabelWidth.setValue(60)
             dialog.ui.spinLabelHeight.setValue(30)
@@ -356,7 +356,7 @@ class Window(qt.QMainWindow):
             dialog.ui.spinHorizontalAdj.setValue(0)
 
         dialog.ui.btnSelecPastaZPL.clicked.connect(
-            lambda: dialog.ui.labelPastaZPL.setText(qt.QFileDialog.getExistingDirectory(self, "Selecionar uma pasta"))
+            lambda: dialog.ui.lePastaZPL.setText(qt.QFileDialog.getExistingDirectory(self, "Selecionar uma pasta"))
             )
 
         dialog.ui.btnSave.accepted.connect(
@@ -367,7 +367,7 @@ class Window(qt.QMainWindow):
                 str(dialog.ui.spinLabelWidth.value()),
                 str(dialog.ui.spinVerticalAdj.value()),
                 str(dialog.ui.spinHorizontalAdj.value()),
-                str(dialog.ui.labelPastaZPL.text())
+                str(dialog.ui.lePastaZPL.text())
             )
         )
 
@@ -651,11 +651,11 @@ class Window(qt.QMainWindow):
         self.default_zpl_folder = self.config['ZPLDir']['directory']
         self.arquivo_zpl = qt.QFileDialog.getOpenFileName(self, "Abrir", self.default_zpl_folder, "Arquivos ZPL (*.zpl)")
         if self.arquivo_zpl:
-            self.ui.lblArq.setText(self.arquivo_zpl[0])
+            self.ui.leSelecArq.setText(self.arquivo_zpl[0])
     
     def imprimir_arquivo_zpl(self):
 
-	qtd = self.ui.spinQtdArq.value()
+        qtd = self.ui.spinQtdArq.value()
         self.config = confighelper.read_config_file()
         self.host = self.config['Device']['host']
         self.printer = self.config['Device']['printer']
@@ -663,15 +663,14 @@ class Window(qt.QMainWindow):
         self.labelHeight = int(self.config['Label']['height'])
         self.ajuste_vertical = self.config['Label']['top_margin']
         self.ajuste_horizontal = self.config['Label']['left_margin']
-        arquivo = self.ui.lblArq.text()
+        arquivo = self.ui.leSelecArq.text()
         if platform.system() == 'Linux':
-            command = '''lp -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + " -n " + qtd + " " + arquivo
+            command = '''lp -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + " -n " + str(qtd) + " " + arquivo
         elif platform.system() == 'Windows':
             command = '''net use lpt2 /delete & net use lpt2 \\\\''' + self.host + '''\\''' + self.printer + ''' & copy ''' + arquivo + ''' lpt2'''
         else:
             command = ""
             print("S.O. não suportado!")
-        print(command)
         os.system(command)
         # self.temp_dir.cleanup()
         if qtd <= 1:
