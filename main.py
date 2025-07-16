@@ -8,6 +8,8 @@ import platform
 import unidecode
 import confighelper
 import cadprodhelper
+import win32api
+import win32print
 from datetime import datetime
 from PyQt5 import QtWidgets as qt
 from PyQt5 import QtGui as gui
@@ -283,15 +285,14 @@ class Window(qt.QMainWindow):
         if platform.system() == 'Linux':
             command = '''file=''' + file + ''' ; cat ''' + fileName + ''' > "${file}" ;\
             lp -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + ''' "${file}"'''
+            os.system(command)
         elif platform.system() == 'Windows':
             fileName = fileName.replace("/", "\\")
             file = file.replace("/", "\\")
             file = "C:" + file[2: ]
-            command = '''copy ''' + fileName + ''' ''' + file + ''' & net use lpt2 /delete & net use lpt2 \\\\''' + self.host + '''\\''' + self.printer + ''' & copy ''' + file + ''' lpt2'''
+            self.chamada_impressao_windows(self.printer, fileName)
         else:
-            command = ""
             print("S.O. não suportado!")
-        os.system(command)
         os.remove(fileName)
         # self.temp_dir.cleanup()
         if qtd <= 1:
@@ -652,6 +653,20 @@ class Window(qt.QMainWindow):
         self.arquivo_zpl = qt.QFileDialog.getOpenFileName(self, "Abrir", self.default_zpl_folder, "Arquivos ZPL (*.zpl)")
         if self.arquivo_zpl:
             self.ui.leSelecArq.setText(self.arquivo_zpl[0])
+
+    def chamada_impressao_windows(self, impressora, arquivo):
+        with open(arquivo, 'rb') as f:
+            dados = f.read()
+        hPrinter = win32print.OpenPrinter(impressora)
+        try:
+            job_info = ("Impressão Direta", None, "RAW")
+            win32print.StartDocPrinter(hPrinter, 1, job_info)
+            win32print.StartPagePrinter(hPrinter)
+            win32print.WritePrinter(hPrinter, dados)
+            win32print.EndPagePrinter(hPrinter)
+            win32print.EndDocPrinter(hPrinter)
+        finally:
+            win32print.ClosePrinter(hPrinter)
     
     def imprimir_arquivo_zpl(self):
 
@@ -666,12 +681,11 @@ class Window(qt.QMainWindow):
         arquivo = self.ui.leSelecArq.text()
         if platform.system() == 'Linux':
             command = '''lp -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + " -n " + str(qtd) + " " + arquivo
+            os.system(command)
         elif platform.system() == 'Windows':
-            command = '''net use lpt2 /delete & net use lpt2 \\\\''' + self.host + '''\\''' + self.printer + ''' & copy ''' + arquivo + ''' lpt2'''
+            self.chamada_impressao_windows(self.printer, arquivo)
         else:
-            command = ""
             print("S.O. não suportado!")
-        os.system(command)
         # self.temp_dir.cleanup()
         if qtd <= 1:
             print(str(qtd) + " etiqueta enviada para impressão!")
