@@ -8,8 +8,6 @@ import platform
 import unidecode
 import confighelper
 import cadprodhelper
-import win32api
-import win32print
 from datetime import datetime
 from PyQt5 import QtWidgets as qt
 from PyQt5 import QtGui as gui
@@ -18,8 +16,11 @@ from mainwindow import Ui_MainWindow as ui
 from settingsdialog import Ui_Dialog as SettingsDialog
 from cadprodutodlg import Ui_Dialog as CadProdutos
 from aboutdlg import Ui_Dialog as InfoDialog
-
 from datetime import datetime, date, timedelta
+
+if platform.system() == 'Windows':
+    import win32api
+    import win32print
 
 class Window(qt.QMainWindow):
 
@@ -284,7 +285,7 @@ class Window(qt.QMainWindow):
         file = file.replace(".", "-") + ".zpl"
         if platform.system() == 'Linux':
             command = '''file=''' + file + ''' ; cat ''' + fileName + ''' > "${file}" ;\
-            lp -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + ''' "${file}"'''
+            lp -o raw -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + ''' "${file}"'''
             os.system(command)
         elif platform.system() == 'Windows':
             fileName = fileName.replace("/", "\\")
@@ -680,7 +681,7 @@ class Window(qt.QMainWindow):
         self.ajuste_horizontal = self.config['Label']['left_margin']
         arquivo = self.ui.leSelecArq.text()
         if platform.system() == 'Linux':
-            command = '''lp -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + " -n " + str(qtd) + " " + arquivo
+            command = '''lp -o raw -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + " -n " + str(qtd) + " " + arquivo
             os.system(command)
         elif platform.system() == 'Windows':
             self.chamada_impressao_windows(self.printer, arquivo)
