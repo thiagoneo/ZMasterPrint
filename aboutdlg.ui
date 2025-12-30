@@ -184,7 +184,7 @@ p, li { white-space: pre-wrap; }
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Versão 0.1</string>
+         <string>Versão 0.3</string>
         </property>
        </widget>
       </item>

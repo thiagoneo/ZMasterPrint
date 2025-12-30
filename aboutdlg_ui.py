@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'aboutdlg.ui'
+# Form implementation generated from reading ui file '/home/thiago.sousa@probrazilian.local/code/ZMasterPrint/aboutdlg.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
