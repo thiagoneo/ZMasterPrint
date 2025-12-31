@@ -120,5 +120,5 @@ class Ui_Dialog(object):
         self.btnFechar.setText(_translate("Dialog", "Fechar"))
         self.label.setText(_translate("Dialog", "<html><head/><body><p><img src=\":/images/icons/zmasterprint.svg\"/></p></body></html>"))
         self.label_2.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:16pt; font-weight:600;\">ZMaster Print</span></p></body></html>"))
-        self.label_3.setText(_translate("Dialog", "Versão 0.3"))
+        self.label_3.setText(_translate("Dialog", "Versão 0.3.1"))
 import about_rc
