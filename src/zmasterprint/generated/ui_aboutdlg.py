@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/thiago.sousa@probrazilian.local/code/ZMasterPrint/aboutdlg.ui'
+# Form implementation generated from reading ui file '/home/ts/src/ZMasterPrint/src/zmasterprint/ui/aboutdlg.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -121,4 +121,4 @@ class Ui_Dialog(object):
         self.label.setText(_translate("Dialog", "<html><head/><body><p><img src=\":/images/icons/zmasterprint.svg\"/></p></body></html>"))
         self.label_2.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:16pt; font-weight:600;\">ZMaster Print</span></p></body></html>"))
         self.label_3.setText(_translate("Dialog", "Versão 0.3.1"))
-import about_rc
+from . import about_rc

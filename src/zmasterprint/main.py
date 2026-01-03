@@ -12,10 +12,10 @@ from datetime import datetime
 from PyQt5 import QtWidgets as qt
 from PyQt5 import QtGui as gui
 from PyQt5.QtCore import Qt, QDate
-from mainwindow import Ui_MainWindow as ui
-from settingsdialog import Ui_Dialog as SettingsDialog
-from cadprodutodlg import Ui_Dialog as CadProdutos
-from aboutdlg import Ui_Dialog as InfoDialog
+from generated.ui_mainwindow import Ui_MainWindow as ui
+from generated.ui_settingsdialog import Ui_Dialog as SettingsDialog
+from generated.ui_cadprodutodlg import Ui_Dialog as CadProdutos
+from generated.ui_aboutdlg import Ui_Dialog as InfoDialog
 from datetime import datetime, date, timedelta
 
 if platform.system() == 'Windows':
