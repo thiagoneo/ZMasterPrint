@@ -1,4 +1,4 @@
 zpl
 Unidecode
-PyQt5>=5.15
+PyQt5
 pywin32; platform_system == "Windows"
