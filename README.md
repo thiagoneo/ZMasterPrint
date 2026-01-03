@@ -19,11 +19,5 @@ Mais detalhes sobre o uso e funcionalidades podem ser explorados diretamente no 
 - Sistema operacional: Linux ou Windows.
 - Python 3.x (para uso via código fonte).
 
-## Instalação
-TODO
-
-## Compilação a partir do código fonte
-TODO
-
 ## Licença
 Consulte o arquivo [LICENSE](LICENSE) para mais informações.
