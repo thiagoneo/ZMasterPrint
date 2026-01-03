@@ -3,7 +3,6 @@ import sys
 import zpl
 import socket
 import tempfile
-import textwrap
 import platform
 import unidecode
 import confighelper
