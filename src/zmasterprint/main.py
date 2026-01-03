@@ -19,7 +19,6 @@ from generated.ui_aboutdlg import Ui_Dialog as InfoDialog
 from datetime import datetime, date, timedelta
 
 if platform.system() == 'Windows':
-    import win32api
     import win32print
 
 class Window(qt.QMainWindow):
