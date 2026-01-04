@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/ts/src/ZMasterPrint/src/zmasterprint/ui/mainwindow.ui'
+# Form implementation generated from reading ui file '/home/ts/src/ZMasterPrint/zmasterprint/ui/mainwindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #

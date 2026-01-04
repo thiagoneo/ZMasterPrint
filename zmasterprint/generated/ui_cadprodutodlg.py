@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/ts/src/ZMasterPrint/src/zmasterprint/ui/cadprodutodlg.ui'
+# Form implementation generated from reading ui file '/home/ts/src/ZMasterPrint/zmasterprint/ui/cadprodutodlg.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #

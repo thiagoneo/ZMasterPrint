@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons">
+    <file>../icons/zmasterprint.svg</file>
     <file>../icons/dialog-cancel.svg</file>
     <file>../icons/document-save.svg</file>
     <file>../icons/edit-delete.svg</file>

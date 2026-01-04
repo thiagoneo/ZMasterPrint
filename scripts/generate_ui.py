@@ -2,7 +2,7 @@ import subprocess
 from pathlib import Path
 
 # Caminhos base
-SRC = Path(__file__).resolve().parent.parent / "src" / "zmasterprint"
+SRC = Path(__file__).resolve().parent.parent / "zmasterprint"
 GENERATED = SRC / "generated"
 
 # Certifica que a pasta generated existe
