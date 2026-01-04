@@ -226,79 +226,92 @@ class Window(qt.QMainWindow):
 
     def print_zpl_label(self, modelo_etiqueta):
         linhas_texto = []
+        temp_output_file = None
 
-        if modelo_etiqueta == 1:
-            qtd = self.ui.spinQtdVal.value()
-            dateVal = self.ui.dateFab.date().toPyDate()
-            dateVal = dateVal + timedelta(days=float(self.ui.spinVal.value()))
-            linha_fab = "Fab.: " + str(self.ui.dateFab.text())
-            linha_val = "Val.: " + str('%02d' % dateVal.day) + "/" + str('%02d' % dateVal.month) + "/" + str('%04d' % dateVal.year)
-            linhas_texto = [linha_fab, linha_val]
+        try:
+            if modelo_etiqueta == 1:
+                qtd = self.ui.spinQtdVal.value()
+                dateVal = self.ui.dateFab.date().toPyDate()
+                dateVal = dateVal + timedelta(days=float(self.ui.spinVal.value()))
+                linha_fab = "Fab.: " + str(self.ui.dateFab.text())
+                linha_val = "Val.: " + str('%02d' % dateVal.day) + "/" + str('%02d' % dateVal.month) + "/" + str('%04d' % dateVal.year)
+                linhas_texto = [linha_fab, linha_val]
 
-        elif modelo_etiqueta == 2:
-            qtd = self.ui.spinQtdPadaria_7.value()
-            data_fab_receita = self.ui.dateFabPadaria_7.date().toPyDate()
-            linha_fab = "Fab.: " + str(self.ui.dateFabPadaria_7.text())
-            cod_produto = self.ui.comboBoxProdutos.currentText().split(':')[0]
-            for produto in self.dados_produtos["produtos"]:
-                if produto["codigo"] == cod_produto:
-                    data_val_receita = data_fab_receita + timedelta(days=float(produto["validade_dias"]))
-                    linha_val = "Val.: " + str('%02d' % data_val_receita.day) + "/" + str('%02d' % data_val_receita.month) + "/" + str('%04d' % data_val_receita.year)
-                    peso = int(produto["peso"])
-                    linha_peso = "Peso: " + str(peso) + "g"
-                    descricao_produto = produto["descricao"]
-                    receita_produto = "Ingredientes: " + produto["receita"]
-                    # receita_produto = textwrap.wrap(receita_produto,width=self.line_width)
-                    # for linha in receita_produto:
-                        # linhas_texto.append(linha)
-                    linhas_texto.append(linha_fab)
-                    linhas_texto.append(linha_val)
-                    linhas_texto.append(linha_peso)
-                    linhas_texto.append(receita_produto)
+            elif modelo_etiqueta == 2:
+                qtd = self.ui.spinQtdPadaria_7.value()
+                data_fab_receita = self.ui.dateFabPadaria_7.date().toPyDate()
+                linha_fab = "Fab.: " + str(self.ui.dateFabPadaria_7.text())
+                cod_produto = self.ui.comboBoxProdutos.currentText().split(':')[0]
+                for produto in self.dados_produtos["produtos"]:
+                    if produto["codigo"] == cod_produto:
+                        data_val_receita = data_fab_receita + timedelta(days=float(produto["validade_dias"]))
+                        linha_val = "Val.: " + str('%02d' % data_val_receita.day) + "/" + str('%02d' % data_val_receita.month) + "/" + str('%04d' % data_val_receita.year)
+                        peso = int(produto["peso"])
+                        linha_peso = "Peso: " + str(peso) + "g"
+                        receita_produto = "Ingredientes: " + produto["receita"]
+                        linhas_texto.append(linha_fab)
+                        linhas_texto.append(linha_val)
+                        linhas_texto.append(linha_peso)
+                        linhas_texto.append(receita_produto)
 
+            else:
+                qtd = self.ui.spinQtd.value()
+                for i in range(self.lineCounter):
+                    widget_item = self.ui.verticalLayout_2.itemAt(i)
+                    widget = widget_item.widget()
+                    linhas_texto.append(widget.text())
+            
+            if qtd <= 1:
+                mensagem = "Enviando 1 etiqueta para impressão..."
+            else:
+                mensagem = f"Enviando {qtd} etiquetas para impressão..."
 
-        
-        else: # (modelo_etiqueta == 0)
-            qtd = self.ui.spinQtd.value()
-            for i in range(self.lineCounter):
-                widget_item = self.ui.verticalLayout_2.itemAt(i)
-                widget = widget_item.widget()
-                text = widget.text()
-                linhas_texto.append(text)
+            zplCode = self.gen_zpl_code(linhas_texto, modelo_etiqueta)
+            zplCode = str(zplCode).replace('^CI', '\n^CI')
+            zplCode = zplCode.replace('^FO', '\n^FO')
+            zplCode = zplCode.replace('^XZ', '\n^PQ' + str(qtd) + ',0,1,N\n^XZ')
 
-        zplCode = self.gen_zpl_code(linhas_texto,modelo_etiqueta)
-        zplCode = str(zplCode).replace('^CI', '\n^CI')
-        zplCode = zplCode.replace('^FO', '\n^FO')
-        zplCode = zplCode.replace('^XZ', '\n^PQ' + str(qtd) + ',0,1,N\n^XZ')
-        if not os.path.exists(self.label_dir):
-            os.makedirs(self.label_dir)
-        fileName = self.label_dir + "/label.tmp"
-        arq = open(fileName, "wt")
-        arq.write(zplCode)
-        arq.close()
-        now = datetime.now()
-        hostname = socket.gethostname()
-        dt = str(now).replace(" ", "_")
-        file = self.label_dir + "/" + hostname + "_" + dt
-        file = file.replace(":", "-")
-        file = file.replace(".", "-") + ".zpl"
-        if platform.system() == 'Linux':
-            command = '''file=''' + file + ''' ; cat ''' + fileName + ''' > "${file}" ;\
-            lp -o raw -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + ''' "${file}"'''
-            os.system(command)
-        elif platform.system() == 'Windows':
-            fileName = fileName.replace("/", "\\")
-            file = file.replace("/", "\\")
-            file = "C:" + file[2: ]
-            self.chamada_impressao_windows(self.printer, fileName)
-        else:
-            print("S.O. não suportado!")
-        os.remove(fileName)
-        # self.temp_dir.cleanup()
-        if qtd <= 1:
-            print(str(qtd) + " etiqueta enviada para impressão!")
-        else:
-            print(str(qtd) + " etiquetas enviadas para impressão!")
+            if not os.path.exists(self.label_dir):
+                os.makedirs(self.label_dir)
+
+            temp_output_file = self.label_dir + "/temp_output_file.tmp"
+            arq = open(temp_output_file, "wt")
+            arq.write(zplCode)
+            arq.close()
+
+            now = datetime.now()
+            hostname = socket.gethostname()
+            dt = str(now).replace(" ", "_")
+            file = self.label_dir + "/" + hostname + "_" + dt
+            file = file.replace(":", "-").replace(".", "-") + ".zpl"
+
+        except Exception as e:
+            print(f"Erro ao preparar etiqueta: {e}")
+            return
+
+        try:
+            if platform.system() == 'Linux':
+                command = '''file=''' + file + ''' ; cat ''' + temp_output_file + ''' > "${file}" ;\
+                lp -o raw -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + ''' "${file}"'''
+                print(mensagem)
+                os.system(command)
+
+            elif platform.system() == 'Windows':
+                temp_output_file = temp_output_file.replace("/", "\\")
+                file = file.replace("/", "\\")
+                file = "C:" + file[2:]
+                print(mensagem)
+                self.chamada_impressao_windows(self.printer, temp_output_file)
+
+            else:
+                print("S.O. não suportado!")
+
+        except Exception as e:
+            print(f"Erro durante a impressão: {e}")
+
+        finally:
+            if temp_output_file and os.path.exists(temp_output_file):
+                os.remove(temp_output_file)
     
     def add_line_edit(self):
         if self.lineCounter < 5:
@@ -666,41 +679,67 @@ class Window(qt.QMainWindow):
             self.ui.leSelecArq.setText(self.arquivo_zpl[0])
     
     def listar_impressoras_linux(self):
-        result = subprocess.run(
-            ["lpstat", "-a"],
-            capture_output=True,
-            text=True
-        )
-        printers = []
-        for line in result.stdout.splitlines():
-            printers.append(line.split()[0])
-        return printers
+        try:
+            result = subprocess.run(
+                ["lpstat", "-a"],
+                capture_output=True,
+                text=True,
+                check=True  # Lança exceção se o comando falhar
+            )
+            printers = []
+            for line in result.stdout.splitlines():
+                printers.append(line.split()[0])
+            return printers
+        except FileNotFoundError:
+            print("Erro: comando 'lpstat' não encontrado. Verifique se o CUPS está instalado.")
+        except subprocess.CalledProcessError as e:
+            print(f"Erro ao listar impressoras no Linux: {e}")
+        except Exception as e:
+            print(f"Erro inesperado no Linux: {e}")
+        return []
 
     def listar_impressoras_windows(self):
-        printers = []
-        for printer in win32print.EnumPrinters(win32print.PRINTER_ENUM_LOCAL | win32print.PRINTER_ENUM_CONNECTIONS):
-            printers.append(printer[2])
-        return printers
+        if win32print is None:
+            print("Erro: módulo 'win32print' não disponível. Instale pywin32.")
+            return []
+        try:
+            printers = []
+            for printer in win32print.EnumPrinters(
+                win32print.PRINTER_ENUM_LOCAL | win32print.PRINTER_ENUM_CONNECTIONS
+            ):
+                printers.append(printer[2])
+            return printers
+        except Exception as e:
+            print(f"Erro ao listar impressoras no Windows: {e}")
+            return []
     
     def listar_impressoras(self):
-        if platform.system() == 'Linux':
+        sistema = platform.system()
+        if sistema == 'Linux':
             return self.listar_impressoras_linux()
-        elif platform.system() == 'Windows':
+        elif sistema == 'Windows':
             return self.listar_impressoras_windows()
         else:
+            print(f"S.O. '{sistema}' não suportado!")
             return []
 
     def chamada_impressao_windows(self, impressora, arquivo):
-        with open(arquivo, 'rb') as f:
-            dados = f.read()
-        hPrinter = win32print.OpenPrinter(impressora)
         try:
-            job_info = ("Impressão Direta", None, "RAW")
+            with open(arquivo, 'rb') as f:
+                dados = f.read()
+            hPrinter = win32print.OpenPrinter(impressora)
+        except Exception as e:
+            print(f"Erro ao preparar impressão: {e}")
+            return
+        try:
+            job_info = ("ZMasterPrint - etiqueta", None, "RAW")
             win32print.StartDocPrinter(hPrinter, 1, job_info)
             win32print.StartPagePrinter(hPrinter)
             win32print.WritePrinter(hPrinter, dados)
             win32print.EndPagePrinter(hPrinter)
             win32print.EndDocPrinter(hPrinter)
+        except Exception as e:
+            print(f"Erro durante a impressão: {e}")
         finally:
             win32print.ClosePrinter(hPrinter)
     
