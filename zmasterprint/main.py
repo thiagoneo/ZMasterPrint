@@ -457,7 +457,6 @@ class Window(qt.QMainWindow):
         components_str = components_str.replace("&lt;qt_version&gt;", QT_VERSION_STR)
         components_str = components_str.replace("&lt;python_libs&gt;", self.listar_bibliotecas())
         dialog.ui.labelInfoComponents.setText(components_str)
-        print(components_str)
         dialog.exec_()
 
     def cad_prod_dialog(self):
