@@ -12,6 +12,7 @@ from datetime import datetime
 from PyQt5 import QtWidgets as qt
 from PyQt5 import QtGui as gui
 from PyQt5.QtCore import Qt, QDate
+from generated import resources_rc
 from generated.ui_mainwindow import Ui_MainWindow as ui
 from generated.ui_settingsdialog import Ui_Dialog as SettingsDialog
 from generated.ui_cadprodutodlg import Ui_Dialog as CadProdutos
@@ -91,6 +92,26 @@ class Window(qt.QMainWindow):
         self.cadprod_dialog = qt.QDialog()
         self.cadprod_dialog.ui = CadProdutos()
         self.cadprod_dialog.ui.setupUi(self.cadprod_dialog)
+
+        # Atualizar ícones de elementos da interface
+        self.ui.actionAbout.setIcon(self.themed_icon("help-about", ":/icons/icons/help-about.svg"))
+        self.ui.actionQuit.setIcon(self.themed_icon("application-exit", ":/icons/icons/application-exit.svg"))
+        self.ui.actionCadProd.setIcon(self.themed_icon("document-edit", ":/icons/icons/document-edit.svg"))
+        self.ui.actionConfigs.setIcon(self.themed_icon("configure", ":/icons/icons/configure.svg"))
+        self.ui.btnAtualizarCBProd.setIcon(self.themed_icon("view-refresh", ":/icons/icons/view-refresh.svg"))
+        self.ui.btnPrint.setIcon(self.themed_icon("document-print", ":/icons/icons/document-print.svg"))
+        self.ui.btnPrintVal.setIcon(self.themed_icon("document-print", ":/icons/icons/document-print.svg"))
+        self.ui.btnPrintPadaria_7.setIcon(self.themed_icon("document-print", ":/icons/icons/document-print.svg"))
+        self.ui.btnPrintArq.setIcon(self.themed_icon("document-print", ":/icons/icons/document-print.svg"))
+        self.ui.actionAddLine.setIcon(self.themed_icon("list-add", ":/icons/icons/list-add.svg"))
+        self.ui.actionRmLine.setIcon(self.themed_icon("list-remove", ":/icons/icons/list-remove.svg"))
+        self.ui.actionClearAll.setIcon(self.themed_icon("edit-clear-history", ":/icons/icons/edit-clear-history.svg"))
+        
+    def themed_icon(self, theme, resource):
+        icon = gui.QIcon.fromTheme(theme)
+        if icon.isNull():
+            icon = gui.QIcon(resource)
+        return icon
 
     def current_date(self):
         """Retorna a data atual"""
@@ -344,6 +365,7 @@ class Window(qt.QMainWindow):
         dialog = qt.QDialog()
         dialog.ui = SettingsDialog()
         dialog.ui.setupUi(dialog)
+        dialog.ui.btnAtualizarCBImpressoras.setIcon(self.themed_icon("view-refresh", ":/icons/icons/view-refresh.svg"))
         dialog.setFixedSize(470,500)
         dialog.setWindowTitle("Configurações")
         dialog.ui.comboBoxImpressoras.clear()
@@ -421,6 +443,13 @@ class Window(qt.QMainWindow):
         dialog.setWindowTitle("Cadastro de produtos")
         self.atualizar_lista_produtos()
         self.limpar_campos()
+
+        dialog.ui.btnNovoProd.setIcon(self.themed_icon("list-add", ":/icons/icons/list-add.svg"))
+        dialog.ui.btnEditarProd.setIcon(self.themed_icon("document-edit", ":/icons/icons/document-edit.svg"))
+        dialog.ui.btnExcluirProd.setIcon(self.themed_icon("edit-delete", ":/icons/icons/edit-delete.svg"))
+        dialog.ui.btnCancelar.setIcon(self.themed_icon("dialog-cancel", ":/icons/icons/dialog-cancel.svg"))
+        dialog.ui.btnSalvar.setIcon(self.themed_icon("document-save", ":/icons/icons/document-save.svg"))
+
         dialog.ui.listaProdutos.itemSelectionChanged.connect(self.seleciona_item)
         dialog.ui.listaProdutos.itemSelectionChanged.connect(self.atualizar_campos_cadproduto)
         dialog.ui.btnSalvar.clicked.connect(self.salvar_produto)

@@ -27,7 +27,7 @@
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -1015,8 +1015,8 @@
           <string>Imprimir</string>
          </property>
          <property name="icon">
-          <iconset theme="document-print">
-           <normaloff>../Documentos/QuickLabelEditor/icons/print.svg</normaloff>../Documentos/QuickLabelEditor/icons/print.svg</iconset>
+          <iconset theme="document-print" resource="../resources/resources.qrc">
+           <normaloff>:/icons/icons/list-remove.svg</normaloff>:/icons/icons/list-remove.svg</iconset>
          </property>
         </widget>
        </item>

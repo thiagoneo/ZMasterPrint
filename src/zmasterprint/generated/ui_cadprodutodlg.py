@@ -134,3 +134,4 @@ class Ui_Dialog(object):
         self.btnEditarProd.setText(_translate("Dialog", "Editar item"))
         self.btnExcluirProd.setToolTip(_translate("Dialog", "Excluir o item selecionado"))
         self.btnExcluirProd.setText(_translate("Dialog", "Excluir item"))
+from . import resources_rc
