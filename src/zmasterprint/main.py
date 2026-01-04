@@ -456,7 +456,6 @@ class Window(qt.QMainWindow):
         dialog.ui.btnSalvar.setEnabled(False)
         dialog.ui.btnCancelar.setEnabled(False)
 
-    
     def seleciona_item(self):
         dialog = self.cadprod_dialog
         # Habilitar botões "Editar item" e "Excluir item"
@@ -744,30 +743,38 @@ class Window(qt.QMainWindow):
             win32print.ClosePrinter(hPrinter)
     
     def imprimir_arquivo_zpl(self):
+        
+        try:
+            qtd = self.ui.spinQtdArq.value()
+            self.config = confighelper.read_config_file()
+            self.host = self.config['Device']['host']
+            self.printer = self.config['Device']['printer']
+            self.labelWidth = int(self.config['Label']['width'])
+            self.labelHeight = int(self.config['Label']['height'])
+            self.ajuste_vertical = self.config['Label']['top_margin']
+            self.ajuste_horizontal = self.config['Label']['left_margin']
+            arquivo = self.ui.leSelecArq.text()
+            if qtd <= 1:
+                mensagem = "Enviando 1 etiqueta para impressão..."
+            else:
+                mensagem = f"Enviando {qtd} etiquetas para impressão..."
+        except Exception as e:
+            print(f"Erro ao preparar impressão do arquivo: {e}")
+            return
 
-        qtd = self.ui.spinQtdArq.value()
-        self.config = confighelper.read_config_file()
-        self.host = self.config['Device']['host']
-        self.printer = self.config['Device']['printer']
-        self.labelWidth = int(self.config['Label']['width'])
-        self.labelHeight = int(self.config['Label']['height'])
-        self.ajuste_vertical = self.config['Label']['top_margin']
-        self.ajuste_horizontal = self.config['Label']['left_margin']
-        arquivo = self.ui.leSelecArq.text()
-        if platform.system() == 'Linux':
-            command = '''lp -o raw -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + " -n " + str(qtd) + " " + arquivo
-            os.system(command)
-        elif platform.system() == 'Windows':
-            self.chamada_impressao_windows(self.printer, arquivo)
-        else:
-            print("S.O. não suportado!")
-        # self.temp_dir.cleanup()
-        if qtd <= 1:
-            print(str(qtd) + " etiqueta enviada para impressão!")
-        else:
-            print(str(qtd) + " etiquetas enviadas para impressão!")
-    
-
+        try:
+            if platform.system() == 'Linux':
+                command = '''lp -o raw -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + " -n " + str(qtd) + " " + arquivo
+                print(mensagem)
+                os.system(command)
+            elif platform.system() == 'Windows':
+                print(mensagem)
+                self.chamada_impressao_windows(self.printer, arquivo)
+            else:
+                print("S.O. não suportado!")
+            # self.temp_dir.cleanup()
+        except Exception as e:
+            print(f"Erro durante a impressão do arquivo: {e}")
 
 # Run Application
 
