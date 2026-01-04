@@ -128,7 +128,6 @@ class Window(qt.QMainWindow):
         """
 
         self.config = confighelper.read_config_file()
-        self.host = self.config['Device']['host']
         self.printer = self.config['Device']['printer']
         self.labelWidth = int(self.config['Label']['width'])
         self.labelHeight = int(self.config['Label']['height'])
@@ -292,7 +291,7 @@ class Window(qt.QMainWindow):
         try:
             if platform.system() == 'Linux':
                 command = '''file=''' + file + ''' ; cat ''' + temp_output_file + ''' > "${file}" ;\
-                lp -o raw -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + ''' "${file}"'''
+                lp -o raw -d ''' + str(self.printer) + ''' "${file}"'''
                 print(mensagem)
                 os.system(command)
 
@@ -345,25 +344,23 @@ class Window(qt.QMainWindow):
         dialog = qt.QDialog()
         dialog.ui = SettingsDialog()
         dialog.ui.setupUi(dialog)
-        dialog.setFixedSize(470,510)
+        dialog.setFixedSize(470,500)
         dialog.setWindowTitle("Configurações")
         dialog.ui.comboBoxImpressoras.clear()
+        dialog.ui.comboBoxImpressoras.addItems(self.listar_impressoras())
         if os.path.isfile(confighelper.local_file):
             config = confighelper.read_config_file()
             labelWidth = int(config['Label']['width'])
             labelHeight = int(config['Label']['height'])
             topMargin = config['Label']['top_margin']
             leftMargin = config['Label']['left_margin']
-            host = config['Device']['host']
             printer = config['Device']['printer']
             zpl_dir = config['ZPLDir']['directory']
             dialog.ui.spinLabelWidth.setValue(int(labelWidth))
             dialog.ui.spinLabelHeight.setValue(int(labelHeight))
             dialog.ui.spinVerticalAdj.setValue(int(topMargin))
             dialog.ui.spinHorizontalAdj.setValue(int(leftMargin))
-            dialog.ui.lineHost.setText(host)
             # dialog.ui.linePrinter.setText(printer)
-            dialog.ui.comboBoxImpressoras.addItems(self.listar_impressoras())
             dialog.ui.comboBoxImpressoras.setCurrentText(printer)
             dialog.ui.lePastaZPL.setText(zpl_dir)
         else:
@@ -379,14 +376,12 @@ class Window(qt.QMainWindow):
             )
         )
         
-
         dialog.ui.btnSelecPastaZPL.clicked.connect(
             lambda: dialog.ui.lePastaZPL.setText(qt.QFileDialog.getExistingDirectory(self, "Selecionar uma pasta"))
             )
 
         dialog.ui.btnSave.accepted.connect(
             lambda: confighelper.write_config_file(
-                str(dialog.ui.lineHost.text()),
                 str(dialog.ui.comboBoxImpressoras.currentText()),
                 str(dialog.ui.spinLabelHeight.value()),
                 str(dialog.ui.spinLabelWidth.value()),
@@ -666,7 +661,6 @@ class Window(qt.QMainWindow):
     
     def selecionar_arquivo_zpl(self):
         self.config = confighelper.read_config_file()
-        self.host = self.config['Device']['host']
         self.printer = self.config['Device']['printer']
         self.labelWidth = int(self.config['Label']['width'])
         self.labelHeight = int(self.config['Label']['height'])
@@ -731,7 +725,7 @@ class Window(qt.QMainWindow):
             print(f"Erro ao preparar impressão: {e}")
             return
         try:
-            job_info = ("ZMasterPrint - etiqueta", None, "RAW")
+            job_info = ("label", None, "RAW")
             win32print.StartDocPrinter(hPrinter, 1, job_info)
             win32print.StartPagePrinter(hPrinter)
             win32print.WritePrinter(hPrinter, dados)
@@ -743,11 +737,10 @@ class Window(qt.QMainWindow):
             win32print.ClosePrinter(hPrinter)
     
     def imprimir_arquivo_zpl(self):
-        
+
         try:
             qtd = self.ui.spinQtdArq.value()
             self.config = confighelper.read_config_file()
-            self.host = self.config['Device']['host']
             self.printer = self.config['Device']['printer']
             self.labelWidth = int(self.config['Label']['width'])
             self.labelHeight = int(self.config['Label']['height'])
@@ -764,7 +757,7 @@ class Window(qt.QMainWindow):
 
         try:
             if platform.system() == 'Linux':
-                command = '''lp -o raw -h ''' + str(self.host) + ''' -d ''' + str(self.printer) + " -n " + str(qtd) + " " + arquivo
+                command = '''lp -o raw -d ''' + str(self.printer) + " -n " + str(qtd) + " " + arquivo
                 print(mensagem)
                 os.system(command)
             elif platform.system() == 'Windows':

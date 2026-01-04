@@ -9,10 +9,9 @@ else: # Linux and MacOS
 
 local_file = directory + "/config.ini"
 
-def write_config_file(host, printer, label_height, label_width, top_margin, left_margin, zpl_dir):
+def write_config_file(printer, label_height, label_width, top_margin, left_margin, zpl_dir):
     config_file = configparser.ConfigParser()
     config_file.add_section("Device")
-    config_file.set("Device", "host", host)
     config_file.set("Device", "printer", printer)
     config_file.add_section("Label")
     config_file.set("Label", "width", label_width)
