@@ -4,6 +4,7 @@ import zpl
 import socket
 import tempfile
 import platform
+import subprocess
 import unidecode
 import confighelper
 import cadprodhelper
@@ -331,8 +332,9 @@ class Window(qt.QMainWindow):
         dialog = qt.QDialog()
         dialog.ui = SettingsDialog()
         dialog.ui.setupUi(dialog)
-        dialog.setFixedSize(470,520)
+        dialog.setFixedSize(470,510)
         dialog.setWindowTitle("Configurações")
+        dialog.ui.comboBoxImpressoras.clear()
         if os.path.isfile(confighelper.local_file):
             config = confighelper.read_config_file()
             labelWidth = int(config['Label']['width'])
@@ -347,13 +349,23 @@ class Window(qt.QMainWindow):
             dialog.ui.spinVerticalAdj.setValue(int(topMargin))
             dialog.ui.spinHorizontalAdj.setValue(int(leftMargin))
             dialog.ui.lineHost.setText(host)
-            dialog.ui.linePrinter.setText(printer)
+            # dialog.ui.linePrinter.setText(printer)
+            dialog.ui.comboBoxImpressoras.addItems(self.listar_impressoras())
+            dialog.ui.comboBoxImpressoras.setCurrentText(printer)
             dialog.ui.lePastaZPL.setText(zpl_dir)
         else:
             dialog.ui.spinLabelWidth.setValue(60)
             dialog.ui.spinLabelHeight.setValue(30)
             dialog.ui.spinVerticalAdj.setValue(0)
             dialog.ui.spinHorizontalAdj.setValue(0)
+        
+        dialog.ui.btnAtualizarCBImpressoras.clicked.connect(
+            lambda: (
+                dialog.ui.comboBoxImpressoras.clear(),
+                dialog.ui.comboBoxImpressoras.addItems(self.listar_impressoras())
+            )
+        )
+        
 
         dialog.ui.btnSelecPastaZPL.clicked.connect(
             lambda: dialog.ui.lePastaZPL.setText(qt.QFileDialog.getExistingDirectory(self, "Selecionar uma pasta"))
@@ -362,7 +374,7 @@ class Window(qt.QMainWindow):
         dialog.ui.btnSave.accepted.connect(
             lambda: confighelper.write_config_file(
                 str(dialog.ui.lineHost.text()),
-                str(dialog.ui.linePrinter.text()),
+                str(dialog.ui.comboBoxImpressoras.currentText()),
                 str(dialog.ui.spinLabelHeight.value()),
                 str(dialog.ui.spinLabelWidth.value()),
                 str(dialog.ui.spinVerticalAdj.value()),
@@ -652,6 +664,31 @@ class Window(qt.QMainWindow):
         self.arquivo_zpl = qt.QFileDialog.getOpenFileName(self, "Abrir", self.default_zpl_folder, "Arquivos ZPL (*.zpl)")
         if self.arquivo_zpl:
             self.ui.leSelecArq.setText(self.arquivo_zpl[0])
+    
+    def listar_impressoras_linux(self):
+        result = subprocess.run(
+            ["lpstat", "-a"],
+            capture_output=True,
+            text=True
+        )
+        printers = []
+        for line in result.stdout.splitlines():
+            printers.append(line.split()[0])
+        return printers
+
+    def listar_impressoras_windows(self):
+        printers = []
+        for printer in win32print.EnumPrinters(win32print.PRINTER_ENUM_LOCAL | win32print.PRINTER_ENUM_CONNECTIONS):
+            printers.append(printer[2])
+        return printers
+    
+    def listar_impressoras(self):
+        if platform.system() == 'Linux':
+            return self.listar_impressoras_linux()
+        elif platform.system() == 'Windows':
+            return self.listar_impressoras_windows()
+        else:
+            return []
 
     def chamada_impressao_windows(self, impressora, arquivo):
         with open(arquivo, 'rb') as f:

@@ -829,8 +829,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset theme="view-refresh">
-            <normaloff>.</normaloff>.</iconset>
+           <iconset theme="view-refresh"/>
           </property>
           <property name="flat">
            <bool>true</bool>
@@ -1045,7 +1044,7 @@
      <x>0</x>
      <y>0</y>
      <width>702</width>
-     <height>31</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuArquivo">
@@ -1073,8 +1072,7 @@
   </widget>
   <action name="actionAddLine">
    <property name="icon">
-    <iconset theme="list-add">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="list-add"/>
    </property>
    <property name="text">
     <string>Adicionar linha</string>
@@ -1085,8 +1083,7 @@
   </action>
   <action name="actionRmLine">
    <property name="icon">
-    <iconset theme="list-remove">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="list-remove"/>
    </property>
    <property name="text">
     <string>Remover linha</string>
@@ -1097,8 +1094,7 @@
   </action>
   <action name="actionClearAll">
    <property name="icon">
-    <iconset theme="edit-clear-history">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="edit-clear-history"/>
    </property>
    <property name="text">
     <string>Limpar tudo</string>
@@ -1109,8 +1105,7 @@
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset theme="application-exit">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="application-exit"/>
    </property>
    <property name="text">
     <string>Sair</string>
@@ -1121,8 +1116,7 @@
   </action>
   <action name="actionConfigs">
    <property name="icon">
-    <iconset theme="configure">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="configure"/>
    </property>
    <property name="text">
     <string>Configurações</string>
@@ -1133,8 +1127,7 @@
   </action>
   <action name="actionAbout">
    <property name="icon">
-    <iconset theme="help-about">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="help-about"/>
    </property>
    <property name="text">
     <string>Sobre</string>
@@ -1145,8 +1138,7 @@
   </action>
   <action name="actionCadProd">
    <property name="icon">
-    <iconset theme="story-editor">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset theme="story-editor"/>
    </property>
    <property name="text">
     <string>Cadastro de produtos</string>
@@ -1154,7 +1146,7 @@
   </action>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>
