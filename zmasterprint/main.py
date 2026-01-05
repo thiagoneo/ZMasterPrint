@@ -412,7 +412,7 @@ class Window(qt.QMainWindow):
         dialog.ui = SettingsDialog()
         dialog.ui.setupUi(dialog)
         dialog.ui.btnAtualizarCBImpressoras.setIcon(self.themed_icon("view-refresh", ":/icons/icons/view-refresh.svg"))
-        dialog.setFixedSize(470,500)
+        dialog.setFixedSize(470,430)
         dialog.setWindowTitle("Configurações")
         dialog.ui.comboBoxImpressoras.clear()
         dialog.ui.comboBoxImpressoras.addItems(self.listar_impressoras())
