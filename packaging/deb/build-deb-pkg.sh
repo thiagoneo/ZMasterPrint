@@ -6,17 +6,22 @@ APP_NAME="ZMasterPrint"
 PKG_NAME="zmasterprint"
 APP_VERSION=$(PYTHONPATH=${PROJECT_ROOT} python3 -c "import zmasterprint.__version__ as v; print(v.VERSION)")
 ARCHITECTURE=$(dpkg --print-architecture)
-PKG_DIR="${SCRIPT_DIR}/${PKG_NAME}_${APP_VERSION}_${ARCHITECTURE}"
+PKG_DIR="${SCRIPT_DIR}/${PKG_NAME}.deb-build"
+PKG_FILE="${PKG_NAME}_${APP_VERSION}_${ARCHITECTURE}.deb"
+REQUIRED_PACKAGES="python3 python3-dev python3-venv python3-pip build-essential"
+MISSING_PACKAGES=""
 
 # Check system dependencies
-if ! command -v python3 &> /dev/null || \
-   ! command -v python3 -m venv &> /dev/null || \
-   ! command -v pip &> /dev/null || \
-   ! command -v dpkg-deb &> /dev/null;
-then
-    echo "Installing required packages...";
-    sudo apt-get update;
-    sudo apt-get install -y python3 python3-venv python3-pip build-essential;
+for pkg in $REQUIRED_PACKAGES; do
+    if ! dpkg -l | grep -q "^ii  $pkg "; then
+        MISSING_PACKAGES="$MISSING_PACKAGES $pkg"
+    fi
+done
+
+if [ -n "$MISSING_PACKAGES" ]; then
+    echo "Installing missing packages: $MISSING_PACKAGES"
+    sudo apt-get update
+    sudo apt-get install -y $MISSING_PACKAGES
 fi
 
 # Prepare Python environment and install dependencies
@@ -27,47 +32,55 @@ pip install -r ${PROJECT_ROOT}/requirements.txt
 pip install pyinstaller
 
 # Build the application using PyInstaller
+rm -rfv ${SCRIPT_DIR}/dist ${SCRIPT_DIR}/build
+
 pyinstaller --name ${PKG_NAME} --onedir --noconfirm --clean --strip \
     --distpath ${SCRIPT_DIR}/dist --workpath ${SCRIPT_DIR}/build \
-    ${PROJECT_ROOT}/zmasterprint/main.py
-
+    --add-data "${PROJECT_ROOT}/requirements.txt:." ${PROJECT_ROOT}/zmasterprint/main.py
 deactivate
 
 # Prepare the package directory structure
-rm -rf ${PKG_DIR}
-mkdir -p ${PKG_DIR}/DEBIAN
-cat <<EOF > ${PKG_DIR}/DEBIAN/control
-Package: ${PKG_NAME}
-Version: ${APP_VERSION}
-Section: utils
-Priority: optional
-Architecture: ${ARCHITECTURE}
-Depends: libc6 (>= $(getconf GNU_LIBC_VERSION | awk '{print $2}')), cups-client
-Maintainer: ZMasterPrint Developers <sousathiago@protonmail.com>
-Description: Uma ferramenta simples e prática para gerar e imprimir etiquetas em impressoras Zebra usando código ZPL.
-EOF
+rm -rfv ${PKG_DIR}
+mkdir -pv ${PKG_DIR}/DEBIAN
 
-mkdir -p ${PKG_DIR}/opt/${PKG_NAME}
-cp -r ${SCRIPT_DIR}/dist/${PKG_NAME}/* ${PKG_DIR}/opt/${PKG_NAME}/
+mkdir -pv ${PKG_DIR}/opt/${PKG_NAME}
+cp -rv ${SCRIPT_DIR}/dist/${PKG_NAME}/* ${PKG_DIR}/opt/${PKG_NAME}/
+mkdir -pv ${PKG_DIR}/opt/${PKG_NAME}/icons
+cp -v ${PROJECT_ROOT}/zmasterprint/icons/zmasterprint.svg ${PKG_DIR}/opt/${PKG_NAME}/icons/
 chmod 755 ${PKG_DIR}/opt/${PKG_NAME}/${PKG_NAME}
 
-mkdir -p ${PKG_DIR}/usr/bin
-ln -sf /opt/${PKG_NAME}/${PKG_NAME} ${PKG_DIR}/usr/bin/${PKG_NAME}
+mkdir -pv ${PKG_DIR}/usr/bin
+ln -sfv /opt/${PKG_NAME}/${PKG_NAME} ${PKG_DIR}/usr/bin/${PKG_NAME}
+mkdir -pv ${PKG_DIR}/usr/share/icons/hicolor/scalable/apps/
+ln -sfv /opt/${PKG_NAME}/icons/zmasterprint.svg ${PKG_DIR}/usr/share/icons/hicolor/scalable/apps/zmasterprint.svg
 
-mkdir -p ${PKG_DIR}/usr/share/applications
+mkdir -pv ${PKG_DIR}/usr/share/applications
 cat <<EOF > ${PKG_DIR}/usr/share/applications/${PKG_NAME}.desktop
 [Desktop Entry]
 Name=ZMasterPrint
 Name[pt_BR]=Editor de etiquetas
 Comment=Edite e etiquetas com facilidade
 Exec=/usr/bin/zmasterprint
-Icon=/opt/ZMasterPrint/icons/zmasterprint.svg
+Icon=/opt/${PKG_NAME}/icons/zmasterprint.svg
 Terminal=false
 Type=Application
 Categories=Utility;
 StartupWMClass=zmasterprint
 EOF
 
+cat <<EOF > ${PKG_DIR}/DEBIAN/control
+Package: ${PKG_NAME}
+Version: ${APP_VERSION}
+Section: utils
+Priority: optional
+Architecture: ${ARCHITECTURE}
+Installed-Size: $(du -sk ${PKG_DIR}/opt ${PKG_DIR}/usr | awk '{sum += $1} END {print sum}')
+Depends: libc6 (>= $(getconf GNU_LIBC_VERSION | awk '{print $2}')), cups-client
+Maintainer: ZMasterPrint Developers <sousathiago@protonmail.com>
+Description: Uma ferramenta simples e prática para gerar e imprimir etiquetas em impressoras Zebra usando código ZPL.
+EOF
+
 # Build the Debian package
-dpkg-deb --build --root-owner-group ${PKG_DIR}
-echo "Debian package created at ${PKG_DIR}.deb"
+rm -fv ${SCRIPT_DIR}/${PKG_FILE}
+dpkg-deb --build --root-owner-group ${PKG_DIR} ${SCRIPT_DIR}/${PKG_FILE}
+echo "Debian package created at ${SCRIPT_DIR}/${PKG_FILE}"
