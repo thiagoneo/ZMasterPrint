@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import zpl
 import socket
@@ -120,16 +121,43 @@ class Window(qt.QMainWindow):
         return icon
     
     def listar_bibliotecas(self):
-        modulos_carregados = list(sys.modules.keys())
         linhas = []
-        for mod in sorted(modulos_carregados):
-            try:
-                ver = version(mod)
-                linhas.append(f'<a href="https://pypi.org/project/{mod}/"><b><span style=" text-decoration: underline; color:#0850bd;">{mod}</span></b></a> {ver}')
-            except:
-                continue
-        html_text = "<br>\n".join(linhas)
-        return html_text
+        base_dir = getattr(self, "exec_dir", os.getcwd())
+        candidates = [
+            os.path.join(base_dir, "requirements.txt"),
+            os.path.join(os.path.dirname(base_dir), "requirements.txt"),  # procura no diretório pai (projeto raiz)
+            os.path.join(os.getcwd(), "requirements.txt"),
+        ]
+        req_path = next((p for p in candidates if os.path.isfile(p)), None)
+        if not req_path:
+            return "<i>requirements.txt não encontrado</i>"
+        try:
+            with open(req_path, "r", encoding="utf-8") as f:
+                for raw in f:
+                    line = raw.strip()
+                    if not line or line.startswith("#") or line.startswith("-") or line.startswith("git+"):
+                        continue
+                    # separar marcador de ambiente (ex: ; platform_system == "Windows")
+                    parts = line.split(";", 1)
+                    req_part = parts[0].strip()
+                    marker = parts[1].strip() if len(parts) > 1 else ""
+                    # se houver marcador de sistema, avaliar condições simples e pular se não corresponder
+                    if marker:
+                        mlow = marker.lower()
+                        cur = platform.system().lower()
+                        if ("windows" in mlow and cur != "windows") or ("linux" in mlow and cur != "linux") or (("darwin" in mlow or "macos" in mlow) and cur != "darwin"):
+                            continue
+                    pkg = re.split(r'[<>=!\[]', req_part, 1)[0].strip()
+                    if not pkg:
+                        continue
+                    try:
+                        ver = version(pkg)
+                        linhas.append(f'<a href="https://pypi.org/project/{pkg}/"><b><span style=" text-decoration: underline; color:#0850bd;">{pkg}</span></b></a> {ver}')
+                    except Exception:
+                        linhas.append(f'{pkg} (não instalado)')
+            return "<br>\n".join(linhas)
+        except Exception as e:
+            return f"Erro ao listar bibliotecas: {e}"
 
     def current_date(self):
         """Retorna a data atual"""
