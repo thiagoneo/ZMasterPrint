@@ -5,8 +5,7 @@ PROJECT_ROOT=$(dirname $(dirname $SCRIPT_DIR))
 APP_NAME="ZMasterPrint"
 PKG_NAME="zmasterprint"
 APP_VERSION=$(PYTHONPATH=${PROJECT_ROOT} python3 -c "import zmasterprint.__version__ as v; print(v.VERSION)")
-# ARCHITECTURE=$(dpkg --print-architecture)
-ARCHITECTURE="amd64"
+ARCHITECTURE=$(dpkg --print-architecture)
 PKG_DIR="${SCRIPT_DIR}/${PKG_NAME}_${APP_VERSION}_${ARCHITECTURE}"
 
 # Check system dependencies
