@@ -9,6 +9,17 @@ APP_VERSION=$(PYTHONPATH=${PROJECT_ROOT} python3 -c "import zmasterprint.__versi
 ARCHITECTURE="amd64"
 PKG_DIR="${SCRIPT_DIR}/${PKG_NAME}_${APP_VERSION}_${ARCHITECTURE}"
 
+# Check system dependencies
+if ! command -v python3 &> /dev/null || \
+   ! command -v python3 -m venv &> /dev/null || \
+   ! command -v pip &> /dev/null || \
+   ! command -v dpkg-deb &> /dev/null;
+then
+    echo "Installing required packages...";
+    sudo apt-get update;
+    sudo apt-get install -y python3 python3-venv python3-pip build-essential;
+fi
+
 # Prepare Python environment and install dependencies
 python3 -m venv venv
 source venv/bin/activate
@@ -43,7 +54,6 @@ chmod 755 ${PKG_DIR}/opt/${PKG_NAME}/${PKG_NAME}
 
 mkdir -p ${PKG_DIR}/usr/bin
 ln -sf /opt/${PKG_NAME}/${PKG_NAME} ${PKG_DIR}/usr/bin/${PKG_NAME}
-chmod 755 ${PKG_DIR}/usr/bin/${PKG_NAME}
 
 mkdir -p ${PKG_DIR}/usr/share/applications
 cat <<EOF > ${PKG_DIR}/usr/share/applications/${PKG_NAME}.desktop
