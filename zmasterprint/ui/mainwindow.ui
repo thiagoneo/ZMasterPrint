@@ -1116,7 +1116,7 @@
   </action>
   <action name="actionConfigs">
    <property name="icon">
-    <iconset theme="configure"/>
+    <iconset theme="settings"/>
    </property>
    <property name="text">
     <string>Configurações</string>

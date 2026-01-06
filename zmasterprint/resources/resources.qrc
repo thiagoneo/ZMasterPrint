@@ -13,5 +13,6 @@
     <file>../icons/edit-clear-history.svg</file>
     <file>../icons/list-add.svg</file>
     <file>../icons/list-remove.svg</file>
+    <file>../icons/dialog-close.svg</file>
   </qresource>
 </RCC>

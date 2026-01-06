@@ -104,7 +104,7 @@ class Window(qt.QMainWindow):
         self.ui.actionAbout.setIcon(self.themed_icon("help-about", ":/icons/icons/help-about.svg"))
         self.ui.actionQuit.setIcon(self.themed_icon("application-exit", ":/icons/icons/application-exit.svg"))
         self.ui.actionCadProd.setIcon(self.themed_icon("document-edit", ":/icons/icons/document-edit.svg"))
-        self.ui.actionConfigs.setIcon(self.themed_icon("configure", ":/icons/icons/configure.svg"))
+        self.ui.actionConfigs.setIcon(self.themed_icon("settings", ":/icons/icons/configure.svg"))
         self.ui.btnAtualizarCBProd.setIcon(self.themed_icon("view-refresh", ":/icons/icons/view-refresh.svg"))
         self.ui.btnPrint.setIcon(self.themed_icon("document-print", ":/icons/icons/document-print.svg"))
         self.ui.btnPrintVal.setIcon(self.themed_icon("document-print", ":/icons/icons/document-print.svg"))
@@ -113,6 +113,7 @@ class Window(qt.QMainWindow):
         self.ui.actionAddLine.setIcon(self.themed_icon("list-add", ":/icons/icons/list-add.svg"))
         self.ui.actionRmLine.setIcon(self.themed_icon("list-remove", ":/icons/icons/list-remove.svg"))
         self.ui.actionClearAll.setIcon(self.themed_icon("edit-clear-history", ":/icons/icons/edit-clear-history.svg"))
+        print(self.listar_bibliotecas())
 
     def themed_icon(self, theme, resource):
         icon = gui.QIcon.fromTheme(theme)
@@ -122,42 +123,37 @@ class Window(qt.QMainWindow):
     
     def listar_bibliotecas(self):
         linhas = []
-        base_dir = getattr(self, "exec_dir", os.getcwd())
-        candidates = [
-            os.path.join(base_dir, "requirements.txt"),
-            os.path.join(os.path.dirname(base_dir), "requirements.txt"),  # procura no diretório pai (projeto raiz)
-            os.path.join(os.getcwd(), "requirements.txt"),
-        ]
-        req_path = next((p for p in candidates if os.path.isfile(p)), None)
-        if not req_path:
-            return "<i>requirements.txt não encontrado</i>"
         try:
-            with open(req_path, "r", encoding="utf-8") as f:
-                for raw in f:
-                    line = raw.strip()
-                    if not line or line.startswith("#") or line.startswith("-") or line.startswith("git+"):
-                        continue
-                    # separar marcador de ambiente (ex: ; platform_system == "Windows")
-                    parts = line.split(";", 1)
-                    req_part = parts[0].strip()
-                    marker = parts[1].strip() if len(parts) > 1 else ""
-                    # se houver marcador de sistema, avaliar condições simples e pular se não corresponder
-                    if marker:
-                        mlow = marker.lower()
-                        cur = platform.system().lower()
-                        if ("windows" in mlow and cur != "windows") or ("linux" in mlow and cur != "linux") or (("darwin" in mlow or "macos" in mlow) and cur != "darwin"):
-                            continue
-                    pkg = re.split(r'[<>=!\[]', req_part, 1)[0].strip()
-                    if not pkg:
+            from importlib.metadata import packages_distributions, version, PackageNotFoundError
+        except Exception:
+            return "<i>informação de pacotes indisponível</i>"
+        pkg_map = packages_distributions()
+        seen = set()
+        for mod in sorted(sys.modules.keys()):
+            base = mod.split('.', 1)[0]
+            if not base or base in seen:
+                continue
+            dists = pkg_map.get(base)
+            if dists:
+                for dist in dists:
+                    if dist in seen:
                         continue
                     try:
-                        ver = version(pkg)
-                        linhas.append(f'<a href="https://pypi.org/project/{pkg}/"><b><span style=" text-decoration: underline; color:#0850bd;">{pkg}</span></b></a> {ver}')
-                    except Exception:
-                        linhas.append(f'{pkg} (não instalado)')
-            return "<br>\n".join(linhas)
-        except Exception as e:
-            return f"Erro ao listar bibliotecas: {e}"
+                        ver = version(dist)
+                        linhas.append(f'<a href="https://pypi.org/project/{dist}/"><b><span style=" text-decoration: underline; color:#0850bd;">{dist}</span></b></a> {ver}')
+                    except PackageNotFoundError:
+                        linhas.append(f'{dist} (não instalado)')
+                    seen.add(dist)
+            else:
+                try:
+                    ver = version(base)
+                    linhas.append(f'<a href="https://pypi.org/project/{base}/"><b><span style=" text-decoration: underline; color:#0850bd;">{base}</span></b></a> {ver}')
+                    seen.add(base)
+                except PackageNotFoundError:
+                    pass
+        if not linhas:
+            return "<i>Nenhuma dependência detectada</i>"
+        return "<br>\n".join(linhas)
 
     def current_date(self):
         """Retorna a data atual"""
@@ -480,11 +476,19 @@ class Window(qt.QMainWindow):
         dialog.setFixedSize(361,420)
         dialog.setWindowTitle("Sobre o Editor de etiquetas")
         dialog.ui.btnFechar.clicked.connect(dialog.close)
-        components_str = dialog.ui.labelInfoComponents.text()
-        components_str = components_str.replace("&lt;python_version&gt;", PYTHON_VERSION)
-        components_str = components_str.replace("&lt;qt_version&gt;", QT_VERSION_STR)
+        dialog.ui.btnFechar.setIcon(self.themed_icon("dialog-close", ":/icons/icons/dialog-close.svg"))
+        components_str = dialog.ui.textBrowserComponents.toHtml()
+        python_str = dialog.ui.labelPython.text()
+        qt_str = dialog.ui.labelQt.text()
+        python_str = python_str.replace("&lt;python_version&gt;", PYTHON_VERSION)
+        qt_str = qt_str.replace("&lt;qt_version&gt;", QT_VERSION_STR)
         components_str = components_str.replace("&lt;python_libs&gt;", self.listar_bibliotecas())
-        dialog.ui.labelInfoComponents.setText(components_str)
+        dialog.ui.labelPython.setText(python_str)
+        dialog.ui.labelQt.setText(qt_str)
+        dialog.ui.textBrowserComponents.setHtml(components_str)
+        dialog.ui.textBrowserComponents.setOpenExternalLinks(True)
+        dialog.ui.labelAbout.setOpenExternalLinks(True)
+
         dialog.exec_()
 
     def cad_prod_dialog(self):

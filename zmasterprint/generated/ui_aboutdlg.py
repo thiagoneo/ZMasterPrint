@@ -14,27 +14,47 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(362, 427)
+        Dialog.resize(362, 430)
         self.tabWidget = QtWidgets.QTabWidget(Dialog)
         self.tabWidget.setGeometry(QtCore.QRect(10, 80, 341, 291))
         self.tabWidget.setObjectName("tabWidget")
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
-        self.label_4 = QtWidgets.QLabel(self.tab)
-        self.label_4.setGeometry(QtCore.QRect(7, 17, 321, 251))
-        self.label_4.setObjectName("label_4")
+        self.labelAbout = QtWidgets.QLabel(self.tab)
+        self.labelAbout.setGeometry(QtCore.QRect(7, 17, 321, 251))
+        self.labelAbout.setObjectName("labelAbout")
         self.tabWidget.addTab(self.tab, "")
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
-        self.labelInfoComponents = QtWidgets.QLabel(self.tab_2)
-        self.labelInfoComponents.setGeometry(QtCore.QRect(7, 17, 321, 251))
-        self.labelInfoComponents.setObjectName("labelInfoComponents")
+        self.labelPython = QtWidgets.QLabel(self.tab_2)
+        self.labelPython.setGeometry(QtCore.QRect(0, 0, 337, 51))
+        self.labelPython.setObjectName("labelPython")
+        self.labelQt = QtWidgets.QLabel(self.tab_2)
+        self.labelQt.setGeometry(QtCore.QRect(0, 50, 337, 51))
+        self.labelQt.setObjectName("labelQt")
+        self.line = QtWidgets.QFrame(self.tab_2)
+        self.line.setGeometry(QtCore.QRect(5, 40, 328, 16))
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
+        self.line_2 = QtWidgets.QFrame(self.tab_2)
+        self.line_2.setGeometry(QtCore.QRect(5, 90, 328, 16))
+        self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_2.setObjectName("line_2")
+        self.textBrowserComponents = QtWidgets.QTextBrowser(self.tab_2)
+        self.textBrowserComponents.setGeometry(QtCore.QRect(0, 100, 337, 156))
+        self.textBrowserComponents.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.textBrowserComponents.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+        self.textBrowserComponents.setOpenExternalLinks(True)
+        self.textBrowserComponents.setOpenLinks(False)
+        self.textBrowserComponents.setObjectName("textBrowserComponents")
         self.tabWidget.addTab(self.tab_2, "")
         self.tab_3 = QtWidgets.QWidget()
         self.tab_3.setObjectName("tab_3")
-        self.label_6 = QtWidgets.QLabel(self.tab_3)
-        self.label_6.setGeometry(QtCore.QRect(7, 7, 321, 261))
-        self.label_6.setObjectName("label_6")
+        self.labelAuthor = QtWidgets.QLabel(self.tab_3)
+        self.labelAuthor.setGeometry(QtCore.QRect(7, 7, 321, 261))
+        self.labelAuthor.setObjectName("labelAuthor")
         self.tabWidget.addTab(self.tab_3, "")
         self.horizontalLayoutWidget = QtWidgets.QWidget(Dialog)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 380, 341, 36))
@@ -102,22 +122,29 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label_4.setText(_translate("Dialog", "<html><head/><body><p>Editor de etiquetas.</p><p>Desenvolvido por <span style=\" font-weight:600;\">Thiago Ferreira</span></p><p><a href=\"https://github.com/thiagoneo/ZMasterPrint\"><span style=\" text-decoration: underline; color:#0850bd;\">https://github.com/thiagoneo/ZMasterPrint</span></a></p><p>Licença: <a href=\"https://opensource.org/license/mit/\"><span style=\" text-decoration: underline; color:#0850bd;\">The MIT License</span></a></p></body></html>"))
+        self.labelAbout.setText(_translate("Dialog", "<html><head/><body><p>Editor de etiquetas.</p><p>Desenvolvido por <span style=\" font-weight:600;\">Thiago Ferreira</span></p><p><a href=\"https://github.com/thiagoneo/ZMasterPrint\"><span style=\" text-decoration: underline; color:#0850bd;\">https://github.com/thiagoneo/ZMasterPrint</span></a></p><p>Licença: <a href=\"https://opensource.org/license/mit/\"><span style=\" text-decoration: underline; color:#0850bd;\">The MIT License</span></a></p></body></html>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("Dialog", "Sobre"))
-        self.labelInfoComponents.setText(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.labelPython.setText(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Segoe UI\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; background-color:transparent;\">Python</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; background-color:transparent;\">Versão &lt;python_version&gt;</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"</body></html>"))
+        self.labelQt.setText(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Segoe UI\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; background-color:transparent;\">Qt</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; background-color:transparent;\">Versão &lt;qt_version&gt;</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; background-color:transparent;\">Versão &lt;qt_version&gt;</span></p></body></html>"))
+        self.textBrowserComponents.setHtml(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Segoe UI\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600; background-color:transparent;\">Bibliotecas utilizadas:</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:transparent;\">&lt;python_libs&gt;</span></p></body></html>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("Dialog", "Componentes"))
-        self.label_6.setText(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.labelAuthor.setText(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-size:10pt; font-weight:400; font-style:normal;\">\n"

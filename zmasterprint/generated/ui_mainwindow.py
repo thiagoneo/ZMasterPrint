@@ -405,7 +405,7 @@ class Ui_MainWindow(object):
         self.actionQuit.setIcon(icon)
         self.actionQuit.setObjectName("actionQuit")
         self.actionConfigs = QtWidgets.QAction(MainWindow)
-        icon = QtGui.QIcon.fromTheme("configure")
+        icon = QtGui.QIcon.fromTheme("settings")
         self.actionConfigs.setIcon(icon)
         self.actionConfigs.setObjectName("actionConfigs")
         self.actionAbout = QtWidgets.QAction(MainWindow)
