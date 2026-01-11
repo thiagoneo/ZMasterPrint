@@ -24,7 +24,7 @@ done
 if [ -n "$MISSING_PACKAGES" ]; then
     echo "Installing missing packages: $MISSING_PACKAGES"
     sudo apt-get update
-    sudo apt-get install -y "$MISSING_PACKAGES"
+    sudo apt-get install -y $MISSING_PACKAGES
 fi
 
 # Prepare Python environment and install dependencies
