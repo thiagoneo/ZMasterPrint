@@ -829,7 +829,8 @@ class Window(qt.QMainWindow):
 
 # Run Application
 
-app = qt.QApplication([])
+app = qt.QApplication(sys.argv)
+app.setApplicationName("zmasterprint")
 application = Window()
 application.show()
 app.exec()
