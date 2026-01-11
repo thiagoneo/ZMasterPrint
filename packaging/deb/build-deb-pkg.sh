@@ -90,7 +90,7 @@ Version: ${APP_VERSION}
 Section: utils
 Priority: optional
 Architecture: ${ARCHITECTURE}
-Installed-Size: $(du -sk ${PKG_DIR}/opt ${PKG_DIR}/usr | awk '{sum += $1} END {print sum}')
+Installed-Size: $(du -sk "${PKG_DIR}/opt" "${PKG_DIR}/usr" | awk '{sum += $1} END {print sum}')
 Depends: libc6 (>= $(getconf GNU_LIBC_VERSION | awk '{print $2}')), cups-client
 Maintainer: ZMasterPrint Developers <sousathiago@protonmail.com>
 Description: Uma ferramenta simples e pr�tica para gerar e imprimir etiquetas em impressoras Zebra usando c�digo ZPL.
