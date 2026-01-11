@@ -105,7 +105,11 @@ def generate_libraries_html(requirements):
 
         lines.append(
             f'<p style="margin:0;">'
-            f'<b><a href="{pypi_url}">{safe_name}</a></b> {safe_version}'
+            f'<b>'
+            f'<a href="{pypi_url}" style="color:#0850bd; text-decoration:underline;">'
+            f'{safe_name}'
+            f'</a>'
+            f'</b> {safe_version}'
             f'</p>'
         )
 
