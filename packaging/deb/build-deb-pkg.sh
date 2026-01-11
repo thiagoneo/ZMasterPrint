@@ -36,7 +36,7 @@ rm -rfv ${SCRIPT_DIR}/dist ${SCRIPT_DIR}/build
 
 pyinstaller --name ${PKG_NAME} --onedir --noconfirm --clean --strip \
     --distpath ${SCRIPT_DIR}/dist --workpath ${SCRIPT_DIR}/build \
-    --add-data "${PROJECT_ROOT}/requirements.txt:." ${PROJECT_ROOT}/zmasterprint/main.py
+    --add-data "${PROJECT_ROOT}/zmasterprint/generated/about_reqs.html:." ${PROJECT_ROOT}/zmasterprint/main.py
 deactivate
 
 # Prepare the package directory structure

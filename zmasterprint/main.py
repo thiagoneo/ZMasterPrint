@@ -1,5 +1,4 @@
 import os
-import re
 import sys
 import zpl
 import socket
@@ -9,12 +8,12 @@ import subprocess
 import unidecode
 import confighelper
 import cadprodhelper
-import html
 from importlib.metadata import version
 from datetime import datetime
 from PyQt5 import QtWidgets as qt
 from PyQt5 import QtGui as gui
 from PyQt5.QtCore import Qt, QDate, QT_VERSION_STR
+from pathlib import Path
 from generated import resources_rc
 from generated.ui_mainwindow import Ui_MainWindow as ui
 from generated.ui_settingsdialog import Ui_Dialog as SettingsDialog
@@ -113,47 +112,12 @@ class Window(qt.QMainWindow):
         self.ui.actionAddLine.setIcon(self.themed_icon("list-add", ":/icons/icons/list-add.svg"))
         self.ui.actionRmLine.setIcon(self.themed_icon("list-remove", ":/icons/icons/list-remove.svg"))
         self.ui.actionClearAll.setIcon(self.themed_icon("edit-clear-history", ":/icons/icons/edit-clear-history.svg"))
-        print(self.listar_bibliotecas())
 
     def themed_icon(self, theme, resource):
         icon = gui.QIcon.fromTheme(theme)
         if icon.isNull():
             icon = gui.QIcon(resource)
         return icon
-    
-    def listar_bibliotecas(self):
-        linhas = []
-        try:
-            from importlib.metadata import packages_distributions, version, PackageNotFoundError
-        except Exception:
-            return "<i>informação de pacotes indisponível</i>"
-        pkg_map = packages_distributions()
-        seen = set()
-        for mod in sorted(sys.modules.keys()):
-            base = mod.split('.', 1)[0]
-            if not base or base in seen:
-                continue
-            dists = pkg_map.get(base)
-            if dists:
-                for dist in dists:
-                    if dist in seen:
-                        continue
-                    try:
-                        ver = version(dist)
-                        linhas.append(f'<a href="https://pypi.org/project/{dist}/"><b><span style=" text-decoration: underline; color:#0850bd;">{dist}</span></b></a> {ver}')
-                    except PackageNotFoundError:
-                        linhas.append(f'{dist} (não instalado)')
-                    seen.add(dist)
-            else:
-                try:
-                    ver = version(base)
-                    linhas.append(f'<a href="https://pypi.org/project/{base}/"><b><span style=" text-decoration: underline; color:#0850bd;">{base}</span></b></a> {ver}')
-                    seen.add(base)
-                except PackageNotFoundError:
-                    pass
-        if not linhas:
-            return "<i>Nenhuma dependência detectada</i>"
-        return "<br>\n".join(linhas)
 
     def current_date(self):
         """Retorna a data atual"""
@@ -468,6 +432,16 @@ class Window(qt.QMainWindow):
         dlg.setText("Configuração salva com sucesso!")
         dlg.exec()
 
+    def load_about_requirements_html(self) -> str:
+        if getattr(sys, "frozen", False):
+            # Executável PyInstaller
+            base_path = Path(sys._MEIPASS)
+        else:
+            # Código fonte normal
+            base_path = Path(__file__).resolve().parent
+        html_path = base_path / "generated" / "about_reqs.html"
+        return html_path.read_text(encoding="utf-8")
+
     def info_dialog(self):
         dialog = qt.QDialog()
         dialog.ui = InfoDialog()
@@ -477,12 +451,11 @@ class Window(qt.QMainWindow):
         dialog.setWindowTitle("Sobre o Editor de etiquetas")
         dialog.ui.btnFechar.clicked.connect(dialog.close)
         dialog.ui.btnFechar.setIcon(self.themed_icon("dialog-close", ":/icons/icons/dialog-close.svg"))
-        components_str = dialog.ui.textBrowserComponents.toHtml()
+        components_str = self.load_about_requirements_html()
         python_str = dialog.ui.labelPython.text()
         qt_str = dialog.ui.labelQt.text()
         python_str = python_str.replace("&lt;python_version&gt;", PYTHON_VERSION)
         qt_str = qt_str.replace("&lt;qt_version&gt;", QT_VERSION_STR)
-        components_str = components_str.replace("&lt;python_libs&gt;", self.listar_bibliotecas())
         dialog.ui.labelPython.setText(python_str)
         dialog.ui.labelQt.setText(qt_str)
         dialog.ui.textBrowserComponents.setHtml(components_str)
