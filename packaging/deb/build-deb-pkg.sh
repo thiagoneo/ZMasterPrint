@@ -31,12 +31,14 @@ pip install --upgrade pip
 pip install -r ${PROJECT_ROOT}/requirements.txt
 pip install pyinstaller
 
+python3 ${PROJECT_ROOT}/scripts/generate_ui.py
+
 # Build the application using PyInstaller
 rm -rfv ${SCRIPT_DIR}/dist ${SCRIPT_DIR}/build
 
 pyinstaller --name ${PKG_NAME} --onedir --noconfirm --clean --strip \
     --distpath ${SCRIPT_DIR}/dist --workpath ${SCRIPT_DIR}/build \
-    --add-data "${PROJECT_ROOT}/zmasterprint/generated/about_reqs.html:." ${PROJECT_ROOT}/zmasterprint/main.py
+    --add-data "${PROJECT_ROOT}/zmasterprint/generated/about_reqs.html:generated" ${PROJECT_ROOT}/zmasterprint/main.py
 deactivate
 
 # Prepare the package directory structure
